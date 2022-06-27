@@ -1,0 +1,78 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TF - Pronostico de Ventas</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container p-5 text-center">
+        <h2>
+            Trabajo Final - Inteligencia Artificial - 202201
+        </h2>
+        <h3>
+            Pronostico de Ventas
+        </h3>
+    </div>
+
+    <div class="container d-flex flex-column">
+
+        <form method="POST" class="post-form" enctype="multipart/form-data">  
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="file" class="form-label">Subir una archivo csv</label>
+                <input type="file" accept=".csv" class="form-control" id="file" name="file">
+            </div>
+            {{ form.errors }}
+            <div class="mt-4">
+                <button type="submit" class="save btn btn-primary">Predecir</button>  
+            </div>
+        </form>
+    </div>
+
+    {% if result %}
+    <div class="p-3 container">
+        <div class="row">
+            <div class="col">
+                <img src="{% static img_path_1 %}" alt="" width="500">
+            </div>
+            <div class="col">
+                <img src="{% static img_path_2 %}" alt="" width="500">
+            </div>
+        </div>
+    </div>
+    
+    <div class="container col">
+        <div>
+            Predicciones
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Indice</th>
+                        <th>Ventas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for valor in arreglito %}
+                    <tr>
+                        <td>{{ valor.dato1 }}</td>
+                        <td>{{ valor.dato2 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>
