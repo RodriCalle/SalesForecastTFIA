@@ -38,8 +38,11 @@ class SalesForecast(View):
 
             return render(request, 'salesforecast/index.html', {
             'result': True, 
-            'img_path_1': 'images/validate.png',
-            'img_path_2': 'images/validateloss.png',
+            'img_path_1': 'images/fig1.png',
+            'img_path_2': 'images/fig2.png',
+            'img_path_3': 'images/validate.png',
+            'img_path_4': 'images/validateloss.png',
+            'img_path_5': 'images/pronostico.png',
             'arreglito': arreglito
             })
         else:

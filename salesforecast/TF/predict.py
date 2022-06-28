@@ -15,26 +15,31 @@ def predict(file_path):
                      names=['fecha', 'unidades'])
     df.head()
 
-    # df.describe()
+    df.describe()
  
-    # print(df.index.min())
-    # print(df.index.max())
+    print(df.index.min())
+    print(df.index.max())
+
+    print(len(df['2017']))
+    print(len(df['2018']))
  
-    # print(len(df['2017']))
-    # print(len(df['2018']))
- 
-    # meses = df.resample('M').mean()
-    # meses
+    meses = df.resample('M').mean()
+    meses
  
     # """## Visualizaciones"""
 
-    # plt.plot(meses['2017'].values)
-    # plt.plot(meses['2018'].values)
+    figure1 = plt.figure()
+    plt.plot(meses['2017'].values)
+    plt.plot(meses['2018'].values)
+    figure1.savefig('static/images/fig1.png')
 
+    figure2 = plt.figure()
     verano2017 = df['2017-06-01':'2017-09-01']
     plt.plot(verano2017.values)
+
     verano2018 = df['2018-06-01':'2018-09-01']
     plt.plot(verano2018.values)
+    figure2.savefig('static/images/fig2.png')
 
     """# Preprocesado de los datos"""
 
@@ -121,19 +126,19 @@ def predict(file_path):
 
     results = model.predict(x_val)
     print(len(results))
-    figure1 = plt.figure()
+    figure3 = plt.figure()
     plt.scatter(range(len(y_val)), y_val, c='g')
     plt.scatter(range(len(results)), results, c='r')
     plt.title('validate')
-    figure1.savefig('static/images/validate.png')
+    figure3.savefig('static/images/validate.png')
     #plt.show()
 
-    figure2 = plt.figure()
+    figure4 = plt.figure()
     plt.plot(history.history['loss'])
     plt.title('loss')
     plt.plot(history.history['val_loss'])
     plt.title('validate loss')
-    figure2.savefig('static/images/validateloss.png')
+    figure4.savefig('static/images/validateloss.png')
     #plt.show()
 
     compara = pd.DataFrame(np.array([y_val, [x[0] for x in results]])).transpose()
@@ -203,6 +208,8 @@ def predict(file_path):
     prediccion1SemanaDiciembre = pd.DataFrame(inverted)
     prediccion1SemanaDiciembre.columns = ['pronostico']
     prediccion1SemanaDiciembre.plot()
+    plt.title('pronostico')
+    plt.savefig('static/images/pronostico.png')
     prediccion1SemanaDiciembre.to_csv('static/files/pronostico.csv')
 
     prediccion1SemanaDiciembre
