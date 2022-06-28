@@ -15,21 +15,21 @@ def predict(file_path):
                      names=['fecha', 'unidades'])
     df.head()
 
-    df.describe()
+    # df.describe()
+ 
+    # print(df.index.min())
+    # print(df.index.max())
+ 
+    # print(len(df['2017']))
+    # print(len(df['2018']))
+ 
+    # meses = df.resample('M').mean()
+    # meses
+ 
+    # """## Visualizaciones"""
 
-    print(df.index.min())
-    print(df.index.max())
-
-    print(len(df['2017']))
-    print(len(df['2018']))
-
-    meses = df.resample('M').mean()
-    meses
-
-    """## Visualizaciones"""
-
-    plt.plot(meses['2017'].values)
-    plt.plot(meses['2018'].values)
+    # plt.plot(meses['2017'].values)
+    # plt.plot(meses['2018'].values)
 
     verano2017 = df['2017-06-01':'2017-09-01']
     plt.plot(verano2017.values)
@@ -121,17 +121,19 @@ def predict(file_path):
 
     results = model.predict(x_val)
     print(len(results))
+    figure1 = plt.figure()
     plt.scatter(range(len(y_val)), y_val, c='g')
     plt.scatter(range(len(results)), results, c='r')
     plt.title('validate')
-    plt.savefig('static/images/validate.png')
+    figure1.savefig('static/images/validate.png')
     #plt.show()
 
+    figure2 = plt.figure()
     plt.plot(history.history['loss'])
     plt.title('loss')
     plt.plot(history.history['val_loss'])
     plt.title('validate loss')
-    plt.savefig('static/images/validateloss.png')
+    figure2.savefig('static/images/validateloss.png')
     #plt.show()
 
     compara = pd.DataFrame(np.array([y_val, [x[0] for x in results]])).transpose()
@@ -144,10 +146,10 @@ def predict(file_path):
     compara2['diferencia'] = compara2['real'] - compara2['prediccion']
     compara2.head()
 
-    compara2.describe()
+    # compara2.describe()
 
-    compara2['real'].plot()
-    compara2['prediccion'].plot()
+    # compara2['real'].plot()
+    # compara2['prediccion'].plot()
 
     """# Predicción
 
