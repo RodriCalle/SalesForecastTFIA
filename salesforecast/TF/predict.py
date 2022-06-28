@@ -11,19 +11,19 @@ def predict(file_path):
     plt.rcParams['figure.figsize'] = (16, 9)
     plt.style.use('fast')
 
-    df = pd.read_csv(file_path, parse_dates=[0], header=None, index_col=0, squeeze=True,
+    deed = pd.read_csv(file_path, parse_dates=[0], header=None, index_col=0, squeeze=True,
                      names=['fecha', 'unidades'])
-    df.head()
+    deed.head()
 
-    df.describe()
+    deed.describe()
  
-    print(df.index.min())
-    print(df.index.max())
+    print(deed.index.min())
+    print(deed.index.max())
 
-    print(len(df['2017']))
-    print(len(df['2018']))
+    print(len(deed['2017']))
+    print(len(deed['2018']))
  
-    meses = df.resample('M').mean()
+    meses = deed.resample('M').mean()
     meses
  
     # """## Visualizaciones"""
@@ -34,10 +34,10 @@ def predict(file_path):
     figure1.savefig('static/images/fig1.png')
 
     figure2 = plt.figure()
-    verano2017 = df['2017-06-01':'2017-09-01']
+    verano2017 = deed['2017-06-01':'2017-09-01']
     plt.plot(verano2017.values)
 
-    verano2018 = df['2018-06-01':'2018-09-01']
+    verano2018 = deed['2018-06-01':'2018-09-01']
     plt.plot(verano2018.values)
     figure2.savefig('static/images/fig2.png')
 
@@ -47,21 +47,21 @@ def predict(file_path):
 
 
     # convert series to supervised learning
-    def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
-        n_vars = 1 if type(data) is list else data.shape[1]
-        df = pd.DataFrame(data)
+    def series_supervisadas(data, n_in=1, n_out=1, dropnan=True):
+        n_car = 1 if type(data) is list else data.shape[1]
+        deed = pd.DataFrame(data)
         cols, names = list(), list()
         # input sequence (t-n, ... t-1)
         for i in range(n_in, 0, -1):
-            cols.append(df.shift(i))
-            names += [('var%d(t-%d)' % (j + 1, i)) for j in range(n_vars)]
+            cols.append(deed.shift(i))
+            names += [('var%d(t-%d)' % (j + 1, i)) for j in range(n_car)]
         # forecast sequence (t, t+1, ... t+n)
         for i in range(0, n_out):
-            cols.append(df.shift(-i))
+            cols.append(deed.shift(-i))
             if i == 0:
-                names += [('var%d(t)' % (j + 1)) for j in range(n_vars)]
+                names += [('var%d(t)' % (j + 1)) for j in range(n_car)]
             else:
-                names += [('var%d(t+%d)' % (j + 1, i)) for j in range(n_vars)]
+                names += [('var%d(t+%d)' % (j + 1, i)) for j in range(n_car)]
         # put it all together
         agg = pd.concat(cols, axis=1)
         agg.columns = names
@@ -72,7 +72,7 @@ def predict(file_path):
 
 
     # load dataset
-    values = df.values
+    values = deed.values
     # ensure all data is float
     values = values.astype('float32')
     # normalize features
@@ -80,7 +80,7 @@ def predict(file_path):
     values = values.reshape(-1, 1)  # esto lo hacemos porque tenemos 1 sola dimension
     scaled = scaler.fit_transform(values)
     # frame as supervised learning
-    reframed = series_to_supervised(scaled, PASOS, 1)
+    reframed = series_supervisadas(scaled, PASOS, 1)
     reframed.head()
 
     """## Dividimos en set de Entrenamiento y Validación"""
@@ -100,7 +100,7 @@ def predict(file_path):
 
     """# Creamos el Modelo de Red Neuronal
 
-    ## Utilizaremos una Red "normal" Feedforward
+    ## Utilizaremos una Red "normal" Feedeedorward
     """
 
 
@@ -161,17 +161,17 @@ def predict(file_path):
     A partir de la última semana de noviembre 2018, intentaremos predecir la primer semana de diciembre.
     """
 
-    ultimosDias = df['2018-11-16':'2018-11-30']
-    ultimosDias
+    lastDays = deed['2018-11-16':'2018-11-30']
+    lastDays
 
     """## Preparamos los datos para Test"""
 
-    values = ultimosDias.values
+    values = lastDays.values
     values = values.astype('float32')
     # normalize features
     values = values.reshape(-1, 1)  # esto lo hacemos porque tenemos 1 sola dimension
     scaled = scaler.fit_transform(values)
-    reframed = series_to_supervised(scaled, PASOS, 1)
+    reframed = series_supervisadas(scaled, PASOS, 1)
     reframed.drop(reframed.columns[[7]], axis=1, inplace=True)
     reframed.head(7)
 
@@ -182,10 +182,10 @@ def predict(file_path):
     x_test
 
 
-    def agregarNuevoValor(x_test, nuevoValor):
+    def newVal(x_test, newVal):
         for i in range(x_test.shape[2] - 1):
             x_test[0][0][i] = x_test[0][0][i + 1]
-        x_test[0][0][x_test.shape[2] - 1] = nuevoValor
+        x_test[0][0][x_test.shape[2] - 1] = newVal
         return x_test
 
 
@@ -194,7 +194,7 @@ def predict(file_path):
         parcial = model.predict(x_test)
         results.append(parcial[0])
         print(x_test)
-        x_test = agregarNuevoValor(x_test, parcial[0])
+        x_test = newVal(x_test, parcial[0])
 
     """## Re-Convertimos los resultados"""
 
@@ -205,22 +205,22 @@ def predict(file_path):
 
     """## Visualizamos el pronóstico"""
 
-    prediccion1SemanaDiciembre = pd.DataFrame(inverted)
-    prediccion1SemanaDiciembre.columns = ['pronostico']
-    prediccion1SemanaDiciembre.plot()
+    prediccion = pd.DataFrame(inverted)
+    prediccion.columns = ['pronostico']
+    prediccion.plot()
     plt.title('pronostico')
     plt.savefig('static/images/pronostico.png')
-    prediccion1SemanaDiciembre.to_csv('static/files/pronostico.csv')
+    prediccion.to_csv('static/files/pronostico.csv')
 
-    prediccion1SemanaDiciembre
+    prediccion
 
     """# Agregamos el resultado en el dataset"""
 
     i = 0
-    for fila in prediccion1SemanaDiciembre.pronostico:
+    for fila in prediccion.pronostico:
         i = i + 1
-        ultimosDias.loc['2018-12-0' + str(i) + ' 00:00:00'] = fila
+        lastDays.loc['2018-12-0' + str(i) + ' 00:00:00'] = fila
         print(fila)
-    ultimosDias.tail(14)
+    lastDays.tail(14)
 
     """El artículo completo en www.aprendemachinelearning.com"""
