@@ -37,60 +37,56 @@
 
     {% if result %}
     <div class="p-3 container">
-        <div class="row">
-            <div class="col">
-                <h2>
+        <ul>
+            <li>
+                <h4>
                     Medidas Mensuales
-                </h2>
+                </h4>
                 <img src="{% static img_path_1 %}" alt="" width="500">
-            </div>
-            <div class="col">
-                <h2>
+            </li>
+            <li>
+                <h4>
                     Ventas Diarias en unidades en Junio y Julio
-                </h2>
+                </h4>
                 <img src="{% static img_path_2 %}" alt="" width="500">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
+            </li>
+            <li>
                 <img src="{% static img_path_3 %}" alt="" width="500">
-            </div>
-            <div class="col">
+            </li>
+            <li>
                 <img src="{% static img_path_4 %}" alt="" width="500">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <h2>
+            </li>
+            <li>
+                <h4>
                     Pronostico de la 1era semana de Diciembre
-                </h2>
+                </h4>
                 <img src="{% static img_path_5 %}" alt="" width="500">
-            </div>
-        </div>
-    </div>
-    
-    <div class="container col">
-        <div>
-            Predicciones
-        </div>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Indice</th>
-                        <th>Ventas</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for valor in arreglito %}
-                    <tr>
-                        <td>{{ valor.dato1 }}</td>
-                        <td>{{ valor.dato2 }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+            </li>
+            <li>
+                <h4>
+                    Predicciones
+                </h4>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Indice</th>
+                                <th>Ventas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for valor in arreglito %}
+                            <tr>
+                                <td>{{ valor.dato1 }}</td>
+                                <td>{{ valor.dato2 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+        </ul>
+        
     </div>
     {% endif %}
 
