@@ -151,11 +151,6 @@ def predict(file_path):
     compara2['diferencia'] = compara2['real'] - compara2['prediccion']
     compara2.head()
 
-    # compara2.describe()
-
-    # compara2['real'].plot()
-    # compara2['prediccion'].plot()
-
     """# Predicción
 
     A partir de la última semana de noviembre 2018, intentaremos predecir la primer semana de diciembre.
@@ -223,4 +218,3 @@ def predict(file_path):
         print(fila)
     lastDays.tail(14)
 
-    """El artículo completo en www.aprendemachinelearning.com"""
